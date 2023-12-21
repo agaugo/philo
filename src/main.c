@@ -59,22 +59,30 @@ int error(char *msg)
 
 int main(int argc, char *argv[])
 {
-    t_init      init_values;
-    pthread_t   *philosophers;
-    uint64_t    *id;
+    t_init          init_values;
+    pthread_t       *philosophers;
+    pthread_mutex_t *chopsticks;
+    t_body          *body;
     uint64_t    i;
 
-    if (argc != 6)
-        return (0);
-    if (initiate_values(argv, &init_values) == -1)
-        return (error("ERROR: Value Initialization."));
-    philosophers = malloc(init_values.total_philos * sizeof(pthread_t));    //protect
+    if (argc != 6) return (0);
+    if (initiate_values(argv, &init_values) == -1) return (error("ERROR: Value Initialization."));
+    philosophers = malloc(init_values.total_philos * sizeof(pthread_t));        //protect
+    chopsticks = malloc(init_values.total_philos * sizeof(pthread_mutex_t));    //protect
+    i = 0;
+    while (i < init_values.total_philos)                        //initialising chopsticks
+    {
+        pthread_mutex_init(&chopsticks[i], NULL);
+        i++;
+    }
     i = 0;
     while (i < init_values.total_philos)
     {
-        id = malloc(sizeof(uint64_t));
-        *id = i;
-        pthread_create(&philosophers[i], NULL, philo_process, (void *)id);
+        body = malloc(sizeof(t_body));
+        body->id = i;
+        body->init_values = init_values;
+        body->chopsticks = chopsticks;
+        pthread_create(&philosophers[i], NULL, philo_process, (void *)body);
         i++;
     }
     i = 0;
@@ -83,5 +91,13 @@ int main(int argc, char *argv[])
         pthread_join(philosophers[i], NULL);
         i++;
     }
+    i = 0;
+    while (i < init_values.total_philos)
+    {
+        pthread_mutex_destroy(&chopsticks[i]);
+        i++;
+    }
+
+
     return (0);
 }
