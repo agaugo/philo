@@ -10,11 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#include "../inc/philo.h"
 
-#include <stdio.h>
+void    *philo_process(void *id)
+{
+    uint64_t philo_id;
 
-int main(int argc, char *argv[]);
-
-#endif
+    philo_id = *(uint64_t *)id;
+    printf("Philosopher %llu: Is Hitting the Nae Nae\n", philo_id);
+    return (NULL);
+}
