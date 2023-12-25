@@ -15,6 +15,7 @@ SRC =	src/main.c	\
 		src/init.c	\
 		src/utils.c	\
 		src/core.c	\
+		src/time.c
 
 OBJS = $(addprefix $(OBJS_DIR), $(SRC:.c=.o))
 

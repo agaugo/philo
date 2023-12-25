@@ -26,6 +26,7 @@ int initiate_values(char *argv[], t_init *init_values)
         init_values->times_eat_each == 0 ||
         init_values->total_philos > PHILO_MAX)
         return (-1);
+	gettimeofday(&(init_values->start_time), NULL);
     return (1);
 }
 

@@ -10,49 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
-# include <stdio.h>
-# include <stdint.h>
-# include <sys/time.h>
-# include <pthread.h>
-# include <stdlib.h>
-# include <unistd.h>
+#include "../inc/philo.h"
 
-# define PHILO_MAX 10000
-
-/* STRUCTS */
-typedef struct	s_init
+uint64_t elapsed_time_ms(t_body *body)
 {
-    uint64_t    	total_philos;
-    uint64_t		time_to_die;
-    uint64_t		time_to_eat;
-    uint64_t		time_to_sleep;
-    uint64_t    	times_eat_each;
-	struct timeval	start_time;
-}				t_init;
+    struct timeval current_time;
+    gettimeofday(&current_time, NULL);
 
-typedef struct s_body
-{
-    t_init          init_values;
-    uint64_t        id;
-    pthread_mutex_t *chopsticks;
-}               t_body;
+    uint64_t elapsed_ms = (current_time.tv_sec - body->init_values.start_time.tv_sec) * 1000LL +
+                          (current_time.tv_usec - body->init_values.start_time.tv_usec) / 1000LL;
 
-/* CORE */
-void        *philo_process(void *id);
-
-/* UTILS */
-int          ft_atoi(const char *str);
-
-/* INIT */
-int          initiate_values(char *argv[], t_init *init_values);
-uint64_t     get_time(void);
-uint64_t	elapsed_time_ms(t_body *body);
-
-
-/* MAIN */
-int          main(int argc, char *argv[]);
-
-
-#endif
+    return elapsed_ms;
+}
