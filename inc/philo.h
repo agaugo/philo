@@ -22,6 +22,13 @@
 # define PHILO_MAX 10000
 
 /* STRUCTS */
+
+typedef struct s_shared_data
+{
+    pthread_mutex_t print_mutex;    // Add other shared data here
+}               t_shared_data;
+
+
 typedef struct	s_init
 {
     uint64_t    	total_philos;
@@ -37,6 +44,7 @@ typedef struct s_body
     t_init          init_values;
     uint64_t        id;
     pthread_mutex_t *chopsticks;
+	t_shared_data	*shared_data;
 }               t_body;
 
 /* CORE */
@@ -46,13 +54,16 @@ void        *philo_process(void *id);
 int          ft_atoi(const char *str);
 
 /* INIT */
-int          initiate_values(char *argv[], t_init *init_values);
-uint64_t     get_time(void);
+int			initiate_values(char *argv[], t_init *init_values);
+uint64_t	get_time(void);
 uint64_t	elapsed_time_ms(t_body *body);
 
 
 /* MAIN */
 int          main(int argc, char *argv[]);
+
+// void	sync_print(t_body *data, uint64_t timestamp, uint64_t id, char *msg);
+
 
 
 #endif
