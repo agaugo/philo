@@ -32,7 +32,7 @@ void    *philo_process(void *philosopher)
     philo_id		= body->id;
     left_chopstick	= philo_id;
 	right_chopstick	= (philo_id + 1) % body->init_values.total_philos;
-     while (1)
+    while (1)
     {
 		sync_print(body, philo_id, "is thinking");
 		if (philo_id % 2 == 0) 
