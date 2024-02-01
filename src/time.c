@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   minishell.h                                        :+:    :+:            */
+/*   philosophers                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: hflohil- <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
@@ -12,25 +12,20 @@
 
 #include "../inc/philo.h"
 
-// Function to calculate elapsed time in milliseconds
-uint64_t elapsed_time_ms(t_body *body)
+int get_time_in_ms(void)
 {
-    struct timeval current_time;
-    gettimeofday(&current_time, NULL);
-
-    uint64_t elapsed_ms = (current_time.tv_sec - body->init_values.start_time.tv_sec) * 1000 + (current_time.tv_usec - body->init_values.start_time.tv_usec) / 1000;
-
-    return elapsed_ms;
-}
-
-// Function to get the current time in seconds
-uint64_t get_time(void)
-{
-    // Structure to store current time
     struct timeval time;
 
-    // Get the current time
-    gettimeofday(&time, NULL);
-    // Return the current time in seconds
-    return (time.tv_sec);
+    if (gettimeofday(&time, NULL) < 0)
+        return (error("Time Error"));
+    return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+}
+size_t  precise_sleep(size_t duration_in_ms)
+{
+    size_t start;
+
+    start = (size_t)get_time_in_ms();
+    while ((get_time_in_ms() - start) < duration_in_ms)
+        usleep(500);
+    return(0);
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   minishell.h                                        :+:    :+:            */
+/*   philosophers                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: hflohil- <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
@@ -12,6 +12,9 @@
 
 #ifndef PHILO_H
 # define PHILO_H
+# define PHILO_MAX 200
+
+//LIBRARIES
 # include <stdio.h>
 # include <stdint.h>
 # include <sys/time.h>
@@ -19,51 +22,63 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# define PHILO_MAX 10000
-
-/* STRUCTS */
-
-typedef struct s_shared_data
+//STRUCTS
+typedef struct   s_philo
 {
-    pthread_mutex_t print_mutex;    // Add other shared data here
-}               t_shared_data;
+    pthread_t       thread;
+    int     philo_id;
+    int     eating;
+    int     meals_eaten;
+    int     number_of_philosophers;
+    int     time_to_die;
+    int     time_to_eat;
+    int     time_to_sleep;
+    int     number_of_times_each_philosopher_must_eat;
+    int     start_time;
+    int     previous_meal;
+    int     *end;
+    pthread_mutex_t *lock_write;
+    pthread_mutex_t *lock_dead;
+    pthread_mutex_t *lock_eating;
+    pthread_mutex_t *right_fork;
+    pthread_mutex_t *left_fork;
+}               t_philo;
 
-
-typedef struct	s_init
+typedef struct s_program
 {
-    uint64_t    	total_philos;
-    uint64_t		time_to_die;
-    uint64_t		time_to_eat;
-    uint64_t		time_to_sleep;
-    uint64_t    	times_eat_each;
-	struct timeval	start_time;
-}				t_init;
+    int             end;
+    t_philo         *philos;
+    pthread_mutex_t lock_write;
+    pthread_mutex_t lock_dead;
+    pthread_mutex_t lock_eating;
+}               t_program;
 
-typedef struct s_body
-{
-    t_init          init_values;
-    uint64_t        id;
-    pthread_mutex_t *chopsticks;
-	t_shared_data	*shared_data;
-}               t_body;
+//UTILITIES
+int get_time_in_ms(void);
+int check_input(int argc, char *argv[]);
+int	ft_atoi(const char *str);
 
-/* CORE */
-void        *philo_process(void *id);
+//INITIATE FUNCTIONS
+int initiate_all(t_program *program, t_philo *philos, pthread_mutex_t *forks, char *input[]);
+int check_input(int argc, char *argv[]);
 
-/* UTILS */
-int          ft_atoi(const char *str);
+//CORE ROUTINE
+void    *routine(void *content);
+void    *monitor_routine(void *philos);
 
-/* INIT */
-int			initiate_values(char *argv[], t_init *init_values);
-uint64_t	get_time(void);
-uint64_t	elapsed_time_ms(t_body *body);
+void    destroy_mutexes(t_program *program, pthread_mutex_t *forks);
+int     launch_threads(t_program *program);
+void	sync_print(t_philo *philo, char *msg);
+void    philo_actions(t_philo *philo);
+size_t  precise_sleep(size_t duration_in_ms);
+
+int    monitor_check_death(t_philo *philo);
+int    monitor_check_eaten(t_philo *philo);
 
 
-/* MAIN */
-int          main(int argc, char *argv[]);
-
-// void	sync_print(t_body *data, uint64_t timestamp, uint64_t id, char *msg);
-
+//MAIN
+int error(char *message);
+int main(int argc, char *argv[]);
 
 
 #endif

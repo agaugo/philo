@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   minishell.h                                        :+:    :+:            */
+/*   philosophers                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: hflohil- <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
@@ -11,6 +11,32 @@
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+void	sync_print(t_philo *philo, char *msg)
+{
+	int time;
+
+    pthread_mutex_lock(philo->lock_write);
+    time = get_time_in_ms() - philo->start_time;
+	printf("Timestamp: %d --- Philosopher %d: %s\n", time, philo->philo_id, msg);
+    pthread_mutex_unlock(philo->lock_write);
+}
+
+int check_input(int argc, char *argv[])
+{
+    int i;
+
+    i = 1;
+    if ((argc != 5 && argc != 6) || ft_atoi(argv[i]) > PHILO_MAX)
+        return (-1);
+    while (argv[i])
+    {
+        if (ft_atoi(argv[i]) == 0)
+            return (-1);
+        i++;
+    }
+    return (1);
+}
 
 static int	ft_isspace(char c)
 {

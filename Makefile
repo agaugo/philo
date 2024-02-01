@@ -3,7 +3,7 @@ NAME	= philo
 CC			= gcc
 CFLAGS		= -Wall -Wextra -Werror -Iinc/
 LDFLAGS		= -lreadline
-OBJS_DIR	= objs/
+OBJS_DIR	= obj/
 
 RED		= \033[1;31m
 GREEN	= \033[1;32m
@@ -11,10 +11,12 @@ YELLOW	= \033[1;33m
 BLUE	= \033[1;34m
 RESET	= \033[0m
 
-SRC =	src/main.c	\
-		src/init.c	\
-		src/utils.c	\
-		src/core.c	\
+SRC =	src/main.c		\
+		src/init.c		\
+		src/utils.c 	\
+		src/threads.c   \
+		src/core.c		\
+		src/actions.c	\
 		src/time.c
 
 OBJS = $(addprefix $(OBJS_DIR), $(SRC:.c=.o))
