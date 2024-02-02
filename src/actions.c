@@ -11,11 +11,11 @@
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-
+	
 int		philosopher_dead(t_philo *philo)
 {
 	pthread_mutex_lock(philo->lock_eating);
-	if (get_current_time() - philo->previous_meal >= philo->time_to_die && philo->eating == 0)
+	if (get_time_in_ms() - philo->previous_meal >= philo->time_to_die && philo->eating == 0)
 		return (pthread_mutex_unlock(philo->lock_eating), 1);
 	pthread_mutex_unlock(philo->lock_eating);
 	return (0);
@@ -36,6 +36,10 @@ int     monitor_check_death(t_philo *philo)
         pthread_mutex_lock(philo[i].lock_eating);
         if ((get_time_in_ms() - (philo[i].previous_meal)) > philo[0].time_to_die)
         {
+			pthread_mutex_lock(philo[0].lock_dead);
+			*philo->end = 1;
+			pthread_mutex_unlock(philo[0].lock_dead);
+			d = 1;
         }
         pthread_mutex_unlock(philo[i].lock_eating);
         i++;
@@ -93,13 +97,13 @@ void    philo_eat(t_philo *philo)
     }
     pthread_mutex_lock(philo->left_fork);
     sync_print(philo, "grabbed a fork");
-    philo->eating = 1;
-    sync_print(philo, "is eating");
     pthread_mutex_lock(philo->lock_eating);
+    philo->eating = 1;
     philo->previous_meal = get_time_in_ms();
+    sync_print(philo, "is eating");
     philo->meals_eaten += 1;
     pthread_mutex_unlock(philo->lock_eating);
-    precise_sleep(philo->time_to_eat);
+    precise_sleep((size_t)philo->time_to_eat);
     philo->eating = 0;
     pthread_mutex_unlock(philo->left_fork);
     pthread_mutex_unlock(philo->right_fork);

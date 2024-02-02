@@ -31,22 +31,22 @@ void    destroy_mutexes(t_program *program, pthread_mutex_t *forks)
 
 int     launch_threads(t_program *program)
 {
-    // pthread_t   thread_monitor;
+    pthread_t   thread_monitor;
     int         i;
     int         x;
 
     i = 0;
     x = program->philos[i].number_of_philosophers;
-    // if (pthread_create(&thread_monitor, NULL, monitor_routine, program->philos) != 0)
-    //     return(-1);
+    if (pthread_create(&thread_monitor, NULL, monitor_routine, program->philos) != 0)
+        return(-1);
     while (i < x)
     {
         if (pthread_create(&program->philos[i].thread, NULL, routine, &program->philos[i]) != 0)
             return(-1);
         i++;
     }
-    // if (pthread_join(thread_monitor, NULL) != 0)
-    //     return (-1);
+    if (pthread_join(thread_monitor, NULL) != 0)
+        return (-1);
     i = 0;
     while (i < x)
     {
@@ -56,14 +56,4 @@ int     launch_threads(t_program *program)
     }
     return (0);
 }
-
-//DETACH?
-//DETACH?
-
-//DETACH?
-
-//DETACH?
-
-//DETACH?
-
-//DETACH?
+//detach

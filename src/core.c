@@ -12,40 +12,44 @@
 
 #include "../inc/philo.h"
 
-// int	death(t_philo *philo)
-// {
-// 	pthread_mutex_lock(philo->lock_dead);
-// 	if (*philo->end == 1)
-//     {
-//         pthread_mutex_unlock(philo->lock_dead);
-// 		return (1);
-//     }
-// 	pthread_mutex_unlock(philo->lock_dead);
-// 	return (0);
-// }
+int	death(t_philo *philo)
+{
+	pthread_mutex_lock(philo->lock_dead);
+	if (*philo->end == 1)
+    {
+        pthread_mutex_unlock(philo->lock_dead);
+		return (1);
+    }
+	pthread_mutex_unlock(philo->lock_dead);
+	return (0);
+}
 
-// void    *monitor_routine(void *content)
-// {
-//     t_philo *philo;
+void    *monitor_routine(void *content)
+{
+    t_philo *philo;
 
-//     philo = (t_philo *)content;
-//     while (1)
-//     {
-//         if (monitor_check_eaten(philo) == 1 || monitor_check_death(philo) == 1)
-//             break ;
-//     }
-//     return (content);
-// }
+    philo = (t_philo *)content;
+    while (1)
+    {
+        if (monitor_check_eaten(philo) == 1 || monitor_check_death(philo) == 1)
+            break ;
+    }
+    return (content);
+}
 
 void *routine(void *content)
 {
-    t_philo *philo = (t_philo *)content;
-
+    t_philo *philo;
+	
+	philo = (t_philo *)content;
     while (1)
-    {
-        if (monitor_check_death(philo) == 1 || monitor_check_eaten(philo) == 1)
-            break;
+	{
         philo_actions(philo);
-    }
+		if (death(&philo[0]) == 1)
+		{
+			sync_print(philo, "died");
+			break ;
+		}
+	}
     return content;
 }
