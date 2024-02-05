@@ -12,6 +12,8 @@
 
 #include "../inc/philo.h"
 
+
+
 void	sync_print(t_philo *philo, char *msg)
 {
 	int time;

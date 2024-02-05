@@ -17,14 +17,14 @@ int get_time_in_ms(void)
     struct timeval time;
 
     if (gettimeofday(&time, NULL) < 0)
-        return (error("Time Error"));
+        return (-1);
     return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
-size_t  precise_sleep(size_t duration_in_ms)
+int  precise_sleep(int duration_in_ms)
 {
-    size_t start;
+    int start;
 
-    start = (size_t)get_time_in_ms();
+    start = get_time_in_ms();
     while ((get_time_in_ms() - start) < duration_in_ms)
         usleep(500);
     return(0);

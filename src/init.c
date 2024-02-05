@@ -42,7 +42,7 @@ void    initiate_philos(t_philo *philos, t_program *program, pthread_mutex_t *fo
         philos[i].end           = &program->end;
         philos[i].lock_write    = &program->lock_write;
         philos[i].lock_dead     = &program->lock_dead;
-        philos[i].lock_eating     = &program->lock_eating;
+        philos[i].lock_eating   = &program->lock_eating;
         philos[i].left_fork     = &forks[i];
         if (i == 0)
             philos[i].right_fork = &forks[num_of_philos - 1];
@@ -66,18 +66,33 @@ int initiate_forks(pthread_mutex_t *forks, int num_of_forks)
     return (0);
 }
 
+// int initiate_program(t_program *program, t_philo *philos)
+// {
+//     program->end = 0;
+//     program->philos = philos;
+//     if (pthread_mutex_init(&program->lock_dead, NULL) != 0)
+//         return (error("Mutex Lock Initiation Fail"));
+//     if (pthread_mutex_init(&program->lock_eating, NULL) != 0)
+//         return (error("Mutex Lock Initiation Fail"));
+//     if (pthread_mutex_init(&program->lock_write, NULL) != 0)
+//         return (error("Mutex Lock Initiation Fail"));
+//     return (0);
+// }
 int initiate_program(t_program *program, t_philo *philos)
 {
     program->end = 0;
     program->philos = philos;
-    if (pthread_mutex_init(&program->lock_dead, NULL) != 0)
+
+    if (pthread_mutex_init(&program->lock_dead, NULL) != 0 ||
+        pthread_mutex_init(&program->lock_eating, NULL) != 0 ||
+        pthread_mutex_init(&program->lock_write, NULL) != 0)
+    {
         return (error("Mutex Lock Initiation Fail"));
-    if (pthread_mutex_init(&program->lock_eating, NULL) != 0)
-        return (error("Mutex Lock Initiation Fail"));
-    if (pthread_mutex_init(&program->lock_write, NULL) != 0)
-        return (error("Mutex Lock Initiation Fail"));
+    }
+
     return (0);
 }
+
 
 int initiate_all(t_program *program, t_philo *philos, pthread_mutex_t *forks, char *input[])
 {

@@ -97,10 +97,10 @@ void    philo_eat(t_philo *philo)
     }
     pthread_mutex_lock(philo->left_fork);
     sync_print(philo, "grabbed a fork");
-    pthread_mutex_lock(philo->lock_eating);
     philo->eating = 1;
-    philo->previous_meal = get_time_in_ms();
     sync_print(philo, "is eating");
+	pthread_mutex_lock(philo->lock_eating);
+    philo->previous_meal = get_time_in_ms();
     philo->meals_eaten += 1;
     pthread_mutex_unlock(philo->lock_eating);
     precise_sleep((size_t)philo->time_to_eat);

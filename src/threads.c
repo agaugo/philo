@@ -36,12 +36,12 @@ int     launch_threads(t_program *program)
     int         x;
 
     i = 0;
-    x = program->philos[i].number_of_philosophers;
+    x = program->philos[0].number_of_philosophers;
     if (pthread_create(&thread_monitor, NULL, monitor_routine, program->philos) != 0)
         return(-1);
     while (i < x)
     {
-        if (pthread_create(&program->philos[i].thread, NULL, routine, &program->philos[i]) != 0)
+        if (pthread_create(&program->philos[i].thread, NULL, &routine, &program->philos[i]) != 0)
             return(-1);
         i++;
     }
@@ -56,4 +56,5 @@ int     launch_threads(t_program *program)
     }
     return (0);
 }
+
 //detach
