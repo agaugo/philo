@@ -65,19 +65,6 @@ int initiate_forks(pthread_mutex_t *forks, int num_of_forks)
     }
     return (0);
 }
-
-// int initiate_program(t_program *program, t_philo *philos)
-// {
-//     program->end = 0;
-//     program->philos = philos;
-//     if (pthread_mutex_init(&program->lock_dead, NULL) != 0)
-//         return (error("Mutex Lock Initiation Fail"));
-//     if (pthread_mutex_init(&program->lock_eating, NULL) != 0)
-//         return (error("Mutex Lock Initiation Fail"));
-//     if (pthread_mutex_init(&program->lock_write, NULL) != 0)
-//         return (error("Mutex Lock Initiation Fail"));
-//     return (0);
-// }
 int initiate_program(t_program *program, t_philo *philos)
 {
     program->end = 0;
@@ -86,9 +73,7 @@ int initiate_program(t_program *program, t_philo *philos)
     if (pthread_mutex_init(&program->lock_dead, NULL) != 0 ||
         pthread_mutex_init(&program->lock_eating, NULL) != 0 ||
         pthread_mutex_init(&program->lock_write, NULL) != 0)
-    {
-        return (error("Mutex Lock Initiation Fail"));
-    }
+        	return (error("Mutex Lock Initiation Fail"));
 
     return (0);
 }

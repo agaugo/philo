@@ -70,10 +70,9 @@ void    destroy_mutexes(t_program *program, pthread_mutex_t *forks);
 int     launch_threads(t_program *program);
 void	sync_print(t_philo *philo, char *msg);
 void    philo_actions(t_philo *philo);
-int  precise_sleep(int duration_in_ms);
-
-int    monitor_check_death(t_philo *philo);
-int    monitor_check_eaten(t_philo *philo);
+int  	precise_sleep(int duration_in_ms);
+int    	monitor_check_death(t_philo *philo);
+int    	monitor_check_eaten(t_philo *philo);
 
 
 //MAIN

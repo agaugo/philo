@@ -54,6 +54,12 @@ int     launch_threads(t_program *program)
             return(-1);
         i++;
     }
+	i = 0;
+	while (i < x)
+	{
+		printf("Philosopher %d has eaten %d meals\n", program->philos[i].philo_id, program->philos[i].meals_eaten);
+		i++;
+	}
     return (0);
 }
 

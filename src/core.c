@@ -24,32 +24,30 @@ int	death(t_philo *philo)
 	return (0);
 }
 
-void    *monitor_routine(void *content)
+void *monitor_routine(void *content)
 {
-    t_philo *philo;
-
-    philo = (t_philo *)content;
+    t_philo *philo = (t_philo *)content;
     while (1)
-    {
-        if (monitor_check_eaten(philo) == 1 || monitor_check_death(philo) == 1)
-            break ;
+	{
+        if (monitor_check_eaten(philo) == 1) {
+            sync_print(philo, "has eaten enough");
+            break;
+        }
+        if (monitor_check_death(philo) == 1) {
+            break;
+        }
     }
     return (content);
 }
 
 void *routine(void *content)
 {
-    t_philo *philo;
-	
-	philo = (t_philo *)content;
+    t_philo *philo = (t_philo *)content;
     while (1)
 	{
         philo_actions(philo);
-		if (death(&philo[0]) == 1)
-		{
-			sync_print(philo, "died");
-			break ;
-		}
-	}
+        if (death(philo) == 1)
+            break ;
+    }
     return content;
 }
