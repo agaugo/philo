@@ -37,9 +37,8 @@ typedef struct   s_philo
     int     start_time;
     int     previous_meal;
     int     *end;
-    pthread_mutex_t *lock_write;
-    pthread_mutex_t *lock_dead;
-    pthread_mutex_t *lock_eating;
+    int     *max;
+    pthread_mutex_t *lock;
     pthread_mutex_t *right_fork;
     pthread_mutex_t *left_fork;
 }               t_philo;
@@ -47,10 +46,9 @@ typedef struct   s_philo
 typedef struct s_program
 {
     int             end;
+    int             max;
     t_philo         *philos;
-    pthread_mutex_t lock_write;
-    pthread_mutex_t lock_dead;
-    pthread_mutex_t lock_eating;
+    pthread_mutex_t lock;
 }               t_program;
 
 //UTILITIES
@@ -68,12 +66,14 @@ void    *monitor_routine(void *philos);
 
 void    destroy_mutexes(t_program *program, pthread_mutex_t *forks);
 int     launch_threads(t_program *program);
-void	sync_print(t_philo *philo, char *msg);
+void	sync_print(t_philo *philo, char *msg, int death);
 void    philo_actions(t_philo *philo);
 int  	precise_sleep(int duration_in_ms);
-int    	monitor_check_death(t_philo *philo);
-int    	monitor_check_eaten(t_philo *philo);
+void    monitor_check(t_philo *philo);
 
+void philo_eat(t_philo *philo);
+void philo_sleep(t_philo *philo);
+void philo_think(t_philo *philo);
 
 //MAIN
 int error(char *message);

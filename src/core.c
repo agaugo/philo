@@ -12,42 +12,62 @@
 
 #include "../inc/philo.h"
 
-int	death(t_philo *philo)
+void    monitor_check(t_philo *philo)
 {
-	pthread_mutex_lock(philo->lock_dead);
-	if (*philo->end == 1)
+    int i;
+    int d;
+
+    i = 0;
+    d = 1;
+    while (1)
     {
-        pthread_mutex_unlock(philo->lock_dead);
-		return (1);
+        while (i < philo->number_of_philosophers)
+        {
+            pthread_mutex_lock(philo->lock);
+            if (*philo->max == 1)
+                d = 0;
+            if (get_time_in_ms() - philo[i].previous_meal > philo->time_to_die)
+            {
+                *philo->end = 1;
+                pthread_mutex_unlock(philo->lock);
+                sync_print(&philo[i], "has died", d);
+                return ;
+            }
+            pthread_mutex_unlock(philo->lock);
+            i++;
+            usleep(5);
+        }
+        i = 0;
     }
-	pthread_mutex_unlock(philo->lock_dead);
-	return (0);
 }
 
-void *monitor_routine(void *content)
-{
-    t_philo *philo = (t_philo *)content;
-    while (1)
-	{
-        if (monitor_check_eaten(philo) == 1) {
-            sync_print(philo, "has eaten enough");
-            break;
-        }
-        if (monitor_check_death(philo) == 1) {
-            break;
-        }
-    }
-    return (content);
-}
 
 void *routine(void *content)
 {
-    t_philo *philo = (t_philo *)content;
+    t_philo *philo;
+    
+    philo = (t_philo *)content;
+    if (philo->philo_id % 2 == 0)
+        precise_sleep(philo->time_to_eat / 10);
     while (1)
 	{
-        philo_actions(philo);
-        if (death(philo) == 1)
+        pthread_mutex_lock(philo->lock);
+        if (*philo->end == 1)
+        {
+            pthread_mutex_unlock(philo->lock);
             break ;
+        }
+        pthread_mutex_unlock(philo->lock);
+        philo_eat(philo);
+        philo_sleep(philo);
+        philo_think(philo);
+        if (philo->number_of_times_each_philosopher_must_eat != -1 && philo->meals_eaten >= philo->number_of_times_each_philosopher_must_eat)
+        {
+                pthread_mutex_lock(philo->lock);
+                *philo->max = 1;
+                pthread_mutex_unlock(philo->lock);
+                break ;
+        }
     }
     return content;
 }

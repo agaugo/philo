@@ -12,16 +12,15 @@
 
 #include "../inc/philo.h"
 
-
-
-void	sync_print(t_philo *philo, char *msg)
+void	sync_print(t_philo *philo, char *msg, int death)
 {
 	int time;
 
-    pthread_mutex_lock(philo->lock_write);
+    pthread_mutex_lock(philo->lock);
     time = get_time_in_ms() - philo->start_time;
-	printf("Timestamp: %d --- Philosopher %d: %s\n", time, philo->philo_id, msg);
-    pthread_mutex_unlock(philo->lock_write);
+    if (*philo->end != 1 || death == 1)
+	    printf("Timestamp: %d --- Philosopher %d: %s\n", time, philo->philo_id, msg);
+    pthread_mutex_unlock(philo->lock);
 }
 
 int check_input(int argc, char *argv[])
