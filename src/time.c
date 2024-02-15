@@ -12,21 +12,21 @@
 
 #include "../inc/philo.h"
 
-int get_time_in_ms(void)
+int	get_time_in_ms(void)
 {
-    struct timeval time;
+	struct timeval	time;
 
-    if (gettimeofday(&time, NULL) < 0)
-        return (-1);
-    return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	if (gettimeofday(&time, NULL) < 0)
+		return (-1);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-int  precise_sleep(int duration_in_ms)
+int	precise_sleep(int duration_in_ms)
 {
-    int start;
+	int start;
 
-    start = get_time_in_ms();
-    while ((get_time_in_ms() - start) < duration_in_ms)
-        usleep(500);
-    return(0);
+	start = get_time_in_ms();
+	while ((get_time_in_ms() - start) < duration_in_ms)
+		usleep(500);
+	return (0);
 }
