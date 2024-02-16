@@ -19,9 +19,9 @@ void	philo_input(t_philo *philo, char *input[])
 	philo->time_to_eat = ft_atoi(input[3]);
 	philo->time_to_sleep = ft_atoi(input[4]);
 	if (input[5])
-		philo->number_of_times_each_philosopher_must_eat = ft_atoi(input[5]);
+		philo->number_of_times = ft_atoi(input[5]);
 	else
-		philo->number_of_times_each_philosopher_must_eat = -1;
+		philo->number_of_times = -1;
 }
 
 void	initiate_philos(t_philo *philos, t_program *program,
@@ -65,6 +65,7 @@ int	initiate_forks(pthread_mutex_t *forks, int num_of_forks)
 	}
 	return (0);
 }
+
 int	initiate_program(t_program *program, t_philo *philos)
 {
 	program->end = 0;

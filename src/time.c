@@ -23,7 +23,7 @@ int	get_time_in_ms(void)
 
 int	precise_sleep(int duration_in_ms)
 {
-	int start;
+	int	start;
 
 	start = get_time_in_ms();
 	while ((get_time_in_ms() - start) < duration_in_ms)

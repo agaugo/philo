@@ -20,9 +20,9 @@ int	error(char *message)
 
 int	main(int argc, char *argv[])
 {
-	t_program program;
-	t_philo philos[PHILO_MAX];
-	pthread_mutex_t forks[PHILO_MAX];
+	t_program		program;
+	t_philo			philos[PHILO_MAX];
+	pthread_mutex_t	forks[PHILO_MAX];
 
 	if (check_input(argc, argv) == -1)
 		return (error("Invalid Arguments"));

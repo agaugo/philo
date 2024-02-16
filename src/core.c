@@ -46,7 +46,6 @@ void	max_reached(t_philo *philo)
 	pthread_mutex_lock(philo->lock);
 	*philo->max = 1;
 	pthread_mutex_unlock(philo->lock);
-
 }
 
 void	*routine(void *content)
@@ -68,8 +67,8 @@ void	*routine(void *content)
 		philo_eat(philo);
 		philo_sleep(philo);
 		philo_think(philo);
-		if (philo->number_of_times_each_philosopher_must_eat != -1 
-			&& philo->meals_eaten >= philo->number_of_times_each_philosopher_must_eat)
+		if (philo->number_of_times != -1
+			&& philo->meals_eaten >= philo->number_of_times)
 		{
 			max_reached(philo);
 			break ;
