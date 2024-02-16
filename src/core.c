@@ -3,7 +3,7 @@
 /*                                                        ::::::::            */
 /*   philosophers                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: hflohil- <marvin@codam.nl>                   +#+                     */
+/*   By: hflohil- <hflohil-@codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 17:16:15 by hugo          #+#    #+#                 */
 /*   Updated: 2023/12/15 15:39:03 by hugo          ########   odam.nl         */
